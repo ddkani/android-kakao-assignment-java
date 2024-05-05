@@ -1,7 +1,9 @@
 package com.example.kakao_assignment_clone.recycler.search_iamge;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -10,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.kakao_assignment_clone.databinding.ItemSearchResultBinding;
 import com.example.kakao_assignment_clone.dto.SearchImageDocument;
+import com.example.kakao_assignment_clone.dto.SearchImageResult;
 
 import java.util.List;
 
@@ -21,6 +24,13 @@ public class SearchResultAdapter extends RecyclerView.Adapter<ItemSearchResultVi
     public SearchResultAdapter(List<SearchImageDocument> dataset, Context context) {
         this.dataset = dataset;
         this.context = context;
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void setSearchResults(List<SearchImageDocument> newDataset) {
+        dataset.clear();
+        dataset.addAll(newDataset);
+        notifyDataSetChanged();
     }
 
     @NonNull

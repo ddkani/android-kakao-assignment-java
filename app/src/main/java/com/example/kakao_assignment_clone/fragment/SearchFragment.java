@@ -1,6 +1,7 @@
 package com.example.kakao_assignment_clone.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.kakao_assignment_clone.BuildConfig;
@@ -59,6 +61,7 @@ public class SearchFragment extends Fragment {
         RecyclerView searchResultView = binding.searchResultView;
         SearchResultAdapter searchResultAdapter = new SearchResultAdapter(dataset, getContext());
         searchResultView.setAdapter(searchResultAdapter);
+        searchResultView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         binding.searchButton.setOnClickListener(view -> {
 
@@ -69,11 +72,19 @@ public class SearchFragment extends Fragment {
                 BuildConfig.KAKAO_API_KEY,
                 searchParam,
                 "recency",
-                100, 100
+                1, 50
             ).enqueue(new Callback<SearchImageResult>() {
                 @Override
                 public void onResponse(Call<SearchImageResult> call, Response<SearchImageResult> response) {
-
+                    // Adapter 에 리스트 추가하고 보여주기
+                    SearchImageResult result = response.body();
+                    assert result != null;
+                    searchResultAdapter.setSearchResults(result.documents);
+                    Log.d("SearchFragment",
+                        String.format(
+                            "아이템 %d 개가 추가되었습니다.", result.documents.size()
+                        )
+                    );
                 }
 
                 @Override
